@@ -3,6 +3,7 @@
     messageList = {"おはよう":"おはようございます！",
             "こんにちは": "こんにちは！",
             "こんばんは":"眠いです!"}
+    addFlag = False
 
     def __init__(self, name = ""):
         self.name = name
@@ -24,7 +25,7 @@
         else:
             print("今日はもう眠いです。")
         
-        if(self.name != ""):
+        if(self.name != "" and self.addFlag == True):
             import json
             json.dump(self.messageList, open(self.name+".txt", 'w'))
 
@@ -70,12 +71,17 @@
 
     def addMessageCommand(self, key, value):
         self.messageList[key] = value
+        self.addFlag = True
         
     def viewHelpMessage(self, help):
         if(help == "add"):
             return "add <key> <value>"
             
 if __name__ == "__main__":
-    import sys
-    bot = CommunicationBot(sys.argv[1])
-    bot.mainLoop()
+    try:
+        import sys
+        bot = CommunicationBot(sys.argv[1])
+    except IndexError:
+        bot = CommunicationBot()
+    finally:
+        bot.mainLoop()
